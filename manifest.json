@@ -1,0 +1,22 @@
+{
+  "name": "contador-visitas",
+  "label": "Contador de Visitas",
+  "type": "widget",
+  "version": "1.21.0",
+  "exbVersion": "1.21.0",
+  "author": "UNGRD - Gestión del Riesgo Chocó",
+  "description": "Widget de contador de visitas en tiempo real para el Portal Web UNGRD Chocó",
+  "copyright": "UNGRD 2026",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "properties": {
+    "hasSetting": true
+  },
+  "translatedLocales": [
+    "en",
+    "es"
+  ],
+  "defaultSize": {
+    "width": 360,
+    "height": 200
+  }
+}
