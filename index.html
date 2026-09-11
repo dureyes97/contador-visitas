@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contador de Visitas - Portal Web UNGRD Chocó</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: transparent;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 12px;
+      user-select: none;
+    }
+
+    .counter-widget-card {
+      width: 100%;
+      max-width: 380px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 4px 16px -2px rgba(34, 45, 93, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Franja superior institucional del Portal Web (#222d5d) */
+    .brand-top-stripe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #222d5d 0%, #1a4d9b 50%, #2563eb 100%);
+    }
+
+    /* Encabezado */
+    .widget-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ungrd-logo {
+      height: 28px;
+      max-width: 110px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .brand-titles {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-subtag {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #1a4d9b;
+    }
+
+    .brand-maintitle {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #222d5d;
+      letter-spacing: -0.01em;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #059669;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 0.62rem;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
+    }
+
+    /* Visualizador de Dígitos */
+    .counter-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 0;
+    }
+
+    .digits-frame {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+    }
+
+    .digit-tile {
+      width: 28px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #ffffff;
+      background: linear-gradient(180deg, #222d5d 0%, #1a2547 100%);
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(34, 45, 93, 0.25);
+      transition: all 0.3s ease;
+    }
+
+    .counter-caption {
+      font-size: 0.7rem;
+      color: #64748b;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+    }
+
+    .counter-caption svg {
+      color: #1a4d9b;
+    }
+
+    /* Pie de métricas */
+    .widget-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .sync-info {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-sync {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      outline: none;
+    }
+
+    .btn-sync:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #1e293b;
+    }
+
+    .btn-sync.spinning svg {
+      animation: rotateSync 1s linear infinite;
+    }
+
+    @keyframes rotateSync {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="counter-widget-card">
+    <div class="brand-top-stripe"></div>
+
+    <!-- Encabezado Institucional -->
+    <div class="widget-header">
+      <div class="brand-left">
+        <img
+          src="https://eqchoco.gestiondelriesgo.gov.co/portal/sharing/rest/content/items/90af96c4ec1c46e9b47a691548365763/data"
+          alt="Logo UNGRD"
+          class="ungrd-logo"
+          onerror="this.style.display='none'"
+        />
+        <div class="brand-titles">
+          <span class="brand-subtag">UNGRD • CHOCÓ</span>
+          <h1 class="brand-maintitle" id="widgetTitle">Visitas del Portal</h1>
+        </div>
+      </div>
+
+      <div class="status-badge" title="Conexión en vivo con ArcGIS Enterprise">
+        <span class="status-dot"></span>
+        <span>En vivo</span>
+      </div>
+    </div>
+
+    <!-- Visualizador de Dígitos -->
+    <div class="counter-body">
+      <div class="digits-frame" id="digitsContainer">
+        <div class="digit-tile">0</div>
+        <div class="digit-tile">0</div>
+        <div class="digit-tile">5</div>
+        <div class="digit-tile">1</div>
+        <div class="digit-tile">2</div>
+      </div>
+      <div class="counter-caption">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="13" r="3"></circle>
+        </svg>
+        <span>Total de visualizaciones acumuladas</span>
+      </div>
+    </div>
+
+    <!-- Pie de métricas -->
+    <div class="widget-footer">
+      <span class="sync-info" id="syncInfoText">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline>
+        </svg>
+        <span id="lastSyncLabel">Sincronizado: En línea</span>
+      </span>
+
+      <button class="btn-sync" id="btnSync" title="Actualizar contador en tiempo real">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path>
+        </svg>
+        <span>Actualizar</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Parámetros de configuración por defecto o vía URL (?itemId=...&portalUrl=...&title=...)
+    const urlParams = new URLSearchParams(window.location.search);
+    const portalUrl = urlParams.get('portalUrl') || 'https://eqchoco.gestiondelriesgo.gov.co/portal';
+    const itemId = urlParams.get('itemId') || '4bb0f289f3ef4e5eb2524c5af0c1ad11';
+    const customTitle = urlParams.get('title');
+
+    if (customTitle) {
+      document.getElementById('widgetTitle').textContent = customTitle;
+    }
+
+    const digitsContainer = document.getElementById('digitsContainer');
+    const lastSyncLabel = document.getElementById('lastSyncLabel');
+    const btnSync = document.getElementById('btnSync');
+
+    function renderDigits(num) {
+      const formatted = String(num).padStart(5, '0');
+      digitsContainer.innerHTML = '';
+      for (const char of formatted) {
+        const tile = document.createElement('div');
+        tile.className = 'digit-tile';
+        tile.textContent = char;
+        digitsContainer.appendChild(tile);
+      }
+    }
+
+    async function fetchPortalStats() {
+      btnSync.classList.add('spinning');
+      try {
+        const endpoint = `${portalUrl}/sharing/rest/content/items/${itemId}?f=json`;
+        const res = await fetch(endpoint, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && typeof data.numViews === 'number') {
+            renderDigits(data.numViews);
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            lastSyncLabel.textContent = `Sincronizado: ${timeStr}`;
+          }
+        }
+      } catch (err) {
+        console.warn('Error al obtener estadísticas del portal:', err);
+      } finally {
+        setTimeout(() => btnSync.classList.remove('spinning'), 500);
+      }
+    }
+
+    btnSync.addEventListener('click', fetchPortalStats);
+
+    // Carga inicial y auto-refresco cada 30 segundos
+    fetchPortalStats();
+    setInterval(fetchPortalStats, 30000);
+  </script>
+</body>
+</html>
